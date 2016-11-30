@@ -1,4 +1,5 @@
 from boto.mws.response import Destination
+from __builtin__ import True
 
 
 def towerOfHanoi(n, source, buffer, destination):
@@ -97,7 +98,7 @@ def longestCommonSubstring(str1, str2):
     
     n = len(str1)
     m = len(str2)
-    
+
     
     lcs = ""
     
@@ -164,10 +165,129 @@ def maximumProductSubarray(arr):
         
     
     
-  
+# A Dynamic Programming based Python program for LPS problem
+# Returns the length of the longest palindromic subsequence in seq
+def lps(str):
+    n = len(str)
+ 
+    # Create a table to store results of subproblems
+    L = [[0 for x in range(n)] for x in range(n)]
+ 
+    # Strings of length 1 are palindrome of length 1
+    for i in range(n):
+        L[i][i] = 1
+ 
+    # Build the table. Note that the lower diagonal values of table are
+    # useless and not filled in the process. The values are filled in a
+    # manner similar to Matrix Chain Multiplication DP solution (See
+    # http://www.geeksforgeeks.org/dynamic-programming-set-8-matrix-chain-multiplication/
+    # cl is length of substring
+    for cl in range(2, n+1):
+        for i in range(n-cl+1):
+            j = i+cl-1
+            if str[i] == str[j] and cl == 2:
+                L[i][j] = 2
+            elif str[i] == str[j]:
+                L[i][j] = L[i+1][j-1] + 2
+            else:
+                L[i][j] = max(L[i][j-1], L[i+1][j]);
+ 
+    return L[0][n-1] 
 
+
+def findSubArraySum(arr, val):
+    subarr_map = {}
+    curr_sum = 0
+    for i in range(len(arr)):
+        curr_sum += arr[i]
+        if curr_sum  == val:
+            print "0 to ", str(i)
+            return
+        if (curr_sum - val) in subarr_map:
+            print str(subarr_map[curr_sum - val]) + " to " + str(i)
+            return
+        
+        subarr_map[curr_sum] = i
+    
+    print "Not found"
+    
+def findSubSetSumFromArrayExistsRecur(arr, val):
+    # check whether subset with a given sum exist
+    # time complexity exponential
+    def helper(arr, val, n):
+        if val==0:
+            return True
+        
+        if n==0 and val !=0:
+            return False
+        
+        if arr[n-1] > val:
+            return helper(arr, val, n-1)
+        
+        return helper(arr, val-arr[n-1], n-1) or helper(arr, val, n-1)
+    helper(arr,val, len(arr))  
+
+    
+def findSubSetSumFromArrayExistsDP(arr, val):
+    # Time complexity: n*val
+    m = val
+    n = len(arr)
+    
+    matrix = [[False]*(m+1)]*(n+1)
+    
+    #If sum is 0, then answer is true
+    for i in range(n+1):
+        matrix[0][i] = True
+        
+    #If sum is not 0 and set is empty
+    for j in range(1, m+1):
+        matrix[j][0] = False  
+    
+    
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            matrix[i][j] = matrix[i][j-1] 
+            if i>= arr[j-1]:
+                matrix[i][j] = matrix[i][j] or matrix[i-arr[j-1]][j-1]
+                
+                
+    
+    return matrix[m][n]
             
-
+    
+def findSubsetSumFromArray(arr, val):
+    def tsum(currentSum,total,input,record,n, val):
+        if total==sum :
+          for i in range(0,n):
+           if record[i]:
+            print input[i]
+                        
+           i = i+1
+           for i in range(i,n):
+            if record[i]:
+             print input[i]
+           print ""
+           return
+        i=currentSum
+        for i in range(i,n):
+         if total+input[i]>sum :
+          continue
+         if i>0 and input[i]==input[i-1] and not record[i-1] : 
+          continue
+         record[i]=1
+         tsum(i+1,total+input[i],input,record,l, val)
+         record[i]=0
+    
+    record = []
+    l = len(arr)
+    
+    for i in range(0,l):
+        record.append(0)
+    print "From the array the elements equal to val are:"
+    tsum(0,0,input,record,l,val)
+    
+    
+    
 def run():
     source = [1,2,3,4,5]
     buffer = []
@@ -188,7 +308,7 @@ def run():
     
     arr = [6,2,8,-10,0,-4,10,100, -2]
     
-    print maxContiguousSubArraySUM(arr)
-    print maximumProductSubarray(arr)
-
+    #print maxContiguousSubArraySUM(arr)
+    #print maximumProductSubarray(arr)
+    findSubArraySum(arr, 106)
 run()

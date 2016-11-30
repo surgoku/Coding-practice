@@ -71,6 +71,25 @@ def prob10(half):
         return result
 
 
+def generateRandomNumber(n,k):
+
+    def helper(n):
+        tmp_num = []
+        for i in range(20):
+            tmp_num.append(coin())
+        # tmp_num =[0,1,1,0,....0] with 20 elements
+        
+        tmp_num = [str(int(x)) for x in tmp_num]
+        tmp_num = ''.join(tmp_num)  #'0110...0'
+        rand_num = int(tmp_num, 2)  # if rand_num is large enought
+        rand_num = rand_num % (n+1)  # this will be uniformly distributed from 0 to n+1
+    
+    result = []
+    for i in range(k):
+        result.append(helper(n))
+    
+    return result
+
 
 def run():
     out_map = {}
@@ -95,7 +114,10 @@ def run():
         out_map[out] += 1
         count += 1
     
-    for i in out_map:
-        print i, out_map[i]*100./count
+    #for i in out_map:
+    #    print i, out_map[i]*100./count
+        
+        
+    print generateRandomNumber(1000, 5)
     #print findRandomUsingCoin2(10)
 run()

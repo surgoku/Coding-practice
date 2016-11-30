@@ -12,13 +12,19 @@ class Node:
 
 
 def createList():
-    node = Node(10)
-    node = Node(7, node)
-    node = Node(11, node)
-    node = Node(0, node)
-    node = Node(3, node)
-    
-    return node 
+    elements = [10,7,11,0,3,5]
+    root = Node(15)
+    temp_node = root
+    counter=0
+    for i in elements:
+        node = Node(i)
+        temp_node.next = node
+        
+        counter+=1
+        if counter <= len(elements)-1:
+            temp_node = temp_node.next
+
+    return root 
 
 
 def containsLoop(root):
@@ -37,7 +43,11 @@ def containsLoop(root):
     return False
 
 def run():
-    node = createList()
+    root = createList()
+    #print root.val
+    while not root.next is None:
+        print root.val
+        root = root.next
 
     
     
